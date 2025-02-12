@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:  # Add this line to enable manual trigger
 
 jobs:
   sonarqube:
@@ -19,5 +20,6 @@ jobs:
         run: |
           sonar-scanner \
             -Dsonar.projectKey=your_project_key \
-            -Dsonar.host.url=${{ secrets.SONARQUBE_URL }} \
-            -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}
+            -Dsonar.organization=your_organization \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}

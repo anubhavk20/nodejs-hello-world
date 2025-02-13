@@ -1,25 +1,19 @@
-name: SonarQube Analysis
-
+name: Build
 on:
   push:
     branches:
       - main
-  workflow_dispatch:  # Add this line to enable manual trigger
-
+  pull_request:
+    types: [opened, synchronize, reopened]
 jobs:
   sonarqube:
+    name: SonarQube
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Install SonarScanner
-        run: npm install -g sonarqube-scanner
-
-      - name: Run SonarQube Scan
-        run: |
-          sonar-scanner \
-            -Dsonar.projectKey=anubhav.nodejs \
-            -Dsonar.organization=anubhavkumar321 \
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-            -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
